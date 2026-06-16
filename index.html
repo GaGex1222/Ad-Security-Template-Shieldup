@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="crossorigin"/>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Rubik:wght@400;500;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<script src="image-slot.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#060B12}
+::selection{background:rgba(91,200,232,.35);color:#fff}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#060B12}
+::-webkit-scrollbar-thumb{background:#1E3A52;border-radius:3px}
+@keyframes recBlink{0%,100%{opacity:1}50%{opacity:.12}}
+@keyframes scanMove{0%{top:-2px;opacity:0}6%{opacity:1}94%{opacity:1}100%{top:100%;opacity:0}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes radarSpin{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes waPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes panelIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+image-slot{display:block;}
+</style>
+</helmet>
+
+<div dir="rtl" ref="{{ refRoot }}" style="position:relative;min-height:100vh;background:#060B12;color:#C8D8E8;font-family:'Heebo',sans-serif;overflow-x:hidden;">
+
+  <template id="__bundler_thumbnail"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" rx="20" fill="#0C1520"/><path d="M50 24 L70 31 V49 C70 62 61 71 50 75 C39 71 30 62 30 49 V31 Z" fill="rgba(58,155,213,.15)" stroke="#5BC8E8" stroke-width="2.5"/><text x="50" y="57" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="17" fill="#fff">AD</text></svg></template>
+
+  <!-- scanline overlay -->
+  <div style="position:fixed;inset:0;pointer-events:none;z-index:9998;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.025) 2px,rgba(0,0,0,.025) 4px);"></div>
+
+  <!-- floating whatsapp -->
+  <a href="https://wa.me/9720509300082" target="_blank" rel="noopener" aria-label="וואטסאפ" style="position:fixed;bottom:28px;left:28px;z-index:900;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 4px 20px rgba(37,211,102,.45);animation:waPop .5s cubic-bezier(.4,0,.2,1) 1.4s both;" style-hover="transform:scale(1.12);box-shadow:0 6px 32px rgba(37,211,102,.6)">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+
+  <!-- mobile menu -->
+  <sc-if value="{{ mobOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(6,11,18,.97);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;backdrop-filter:blur(8px);">
+      <a href="#services" onClick="{{ closeMob }}" style="color:#fff;font-family:'Rubik',sans-serif;font-size:1.6rem;font-weight:800;text-decoration:none;">פתרונות</a>
+      <a href="#dimensions" onClick="{{ closeMob }}" style="color:#fff;font-family:'Rubik',sans-serif;font-size:1.6rem;font-weight:800;text-decoration:none;">מוצרים</a>
+      <a href="#selector" onClick="{{ closeMob }}" style="color:#fff;font-family:'Rubik',sans-serif;font-size:1.6rem;font-weight:800;text-decoration:none;">תמחור</a>
+      <a href="#cta" onClick="{{ closeMob }}" style="color:#5BC8E8;font-family:'Rubik',sans-serif;font-size:1.6rem;font-weight:800;text-decoration:none;">קבל הצעה</a>
+    </div>
+  </sc-if>
+
+  <!-- NAV -->
+  <nav data-nav style="position:fixed;top:0;right:0;left:0;z-index:1000;padding:22px 0;border-bottom:1px solid transparent;transition:padding .35s cubic-bezier(.4,0,.2,1),background .35s,border-color .35s;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
+      <a href="#hero" style="display:flex;align-items:center;gap:11px;text-decoration:none;">
+        <div style="width:34px;height:34px;flex-shrink:0;background:#5BC8E8;border-radius:9px;display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#060B12" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <strong style="color:#fff;font-family:'Rubik',sans-serif;font-size:1.15rem;font-weight:800;letter-spacing:-.02em;">AD<span style="color:#5BC8E8;">SECURE</span></strong>
+      </a>
+
+      <ul data-navlinks style="display:flex;gap:34px;list-style:none;margin:0;padding:0;">
+        <li><a href="#services" style="font-family:'Heebo',sans-serif;font-weight:500;font-size:.9rem;color:#9fb3c4;text-decoration:none;transition:color .25s;" style-hover="color:#fff">פתרונות</a></li>
+        <li><a href="#dimensions" style="font-family:'Heebo',sans-serif;font-weight:500;font-size:.9rem;color:#9fb3c4;text-decoration:none;transition:color .25s;" style-hover="color:#fff">מוצרים</a></li>
+        <li><a href="#selector" style="font-family:'Heebo',sans-serif;font-weight:500;font-size:.9rem;color:#9fb3c4;text-decoration:none;transition:color .25s;" style-hover="color:#fff">תמחור</a></li>
+        <li><a href="#tech" style="font-family:'Heebo',sans-serif;font-weight:500;font-size:.9rem;color:#9fb3c4;text-decoration:none;transition:color .25s;" style-hover="color:#fff">טכנולוגיה</a></li>
+      </ul>
+
+      <div style="display:flex;align-items:center;gap:18px;">
+        <a data-navlogin href="tel:0509300082" style="font-family:'Heebo',sans-serif;font-weight:500;font-size:.9rem;color:#9fb3c4;text-decoration:none;border-bottom:1px solid #5BC8E8;padding-bottom:1px;" style-hover="color:#fff">התחברות</a>
+        <a data-navcta href="#cta" style="display:inline-flex;align-items:center;gap:8px;background:#5BC8E8;color:#060B12;padding:10px 22px;border-radius:999px;font-family:'Heebo',sans-serif;font-weight:700;font-size:.88rem;text-decoration:none;transition:transform .25s,box-shadow .25s;" style-hover="transform:translateY(-1px);box-shadow:0 8px 24px rgba(91,200,232,.4)">קבל הצעה</a>
+        <button data-hbg onClick="{{ toggleMob }}" aria-label="תפריט" style="display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;">
+          <span style="display:block;width:22px;height:2px;background:#C8D8E8;border-radius:2px;"></span>
+          <span style="display:block;width:22px;height:2px;background:#C8D8E8;border-radius:2px;"></span>
+          <span style="display:block;width:22px;height:2px;background:#C8D8E8;border-radius:2px;"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <section data-hero id="hero" style="position:relative;background:#060B12;overflow:hidden;padding:150px 0 90px;">
+    <div data-par="0.4" style="position:absolute;top:-10%;left:-10%;width:520px;height:520px;border-radius:50%;background:rgba(58,155,213,.10);filter:blur(120px);pointer-events:none;"></div>
+    <div data-par="0.25" style="position:absolute;inset:0;background-image:linear-gradient(rgba(58,155,213,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(58,155,213,.035) 1px,transparent 1px);background-size:74px 74px;-webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 35%,#000,transparent 80%);mask-image:radial-gradient(ellipse 90% 80% at 50% 35%,#000,transparent 80%);pointer-events:none;"></div>
+
+    <div style="position:relative;z-index:2;max-width:1240px;margin:0 auto;padding:0 28px;display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center;" data-hero-grid>
+
+      <!-- text -->
+      <div data-hero-content style="will-change:transform,opacity;">
+        <div style="display:inline-flex;align-items:center;gap:9px;border:1px solid #1E3A52;border-radius:999px;padding:7px 16px;font-family:'Share Tech Mono',monospace;font-size:.66rem;color:#5BC8E8;letter-spacing:.12em;text-transform:uppercase;margin-bottom:30px;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#5BC8E8;animation:pulse 2s ease-in-out infinite;"></span>הגנה מהדור הבא · מהדורת 2026
+        </div>
+        <h1 style="font-family:'Rubik',sans-serif;font-weight:900;font-size:clamp(3rem,6.4vw,5.4rem);line-height:.96;letter-spacing:-.03em;color:#fff;margin:0;">
+          אבטחה<br/>מתקדמת<br/>
+          <span style="color:transparent;-webkit-text-stroke:1.6px #2f5871;">ברמה אחרת.</span>
+        </h1>
+        <p style="font-size:1.05rem;color:#7d97a8;line-height:1.7;margin:30px 0 38px;max-width:430px;">
+          הגנה בלתי-נראית לבית ולעסק המודרני. מערכת מבוססת AI, מנוטרת 24/7 — שמותקנת נכון פעם אחת, ופשוט נעלמת לתוך שגרת החיים שלך.
+        </p>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;">
+          <a href="#cta" style="display:inline-flex;align-items:center;gap:9px;background:#5BC8E8;color:#060B12;padding:15px 30px;border-radius:999px;font-weight:700;font-size:.98rem;text-decoration:none;transition:transform .3s,box-shadow .3s;" style-hover="transform:translateY(-2px);box-shadow:0 12px 32px rgba(91,200,232,.4)">
+            התחל הגנה
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="transform:scaleX(-1);"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="https://wa.me/9720509300082" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:transparent;color:#C8D8E8;padding:15px 28px;border-radius:999px;font-weight:600;font-size:.98rem;text-decoration:none;border:1px solid #1E3A52;transition:border-color .3s,background .3s;" style-hover="border-color:#5BC8E8;background:rgba(91,200,232,.05)">
+            <span style="width:28px;height:28px;border-radius:50%;border:1px solid #2f5871;display:flex;align-items:center;justify-content:center;"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style="transform:scaleX(-1);margin-right:-1px;"><polygon points="5 3 19 12 5 21 5 3"/></svg></span>
+            דבר איתנו
+          </a>
+        </div>
+      </div>
+
+      <!-- video panel -->
+      <div style="position:relative;perspective:1400px;">
+        <div data-hero-video style="position:relative;border-radius:22px;overflow:hidden;border:1px solid #1E3A52;box-shadow:0 40px 90px rgba(0,0,0,.55);will-change:transform;aspect-ratio:4/3.05;background:#0a121c;">
+          <video src="assets/hero-cam.mp4" autoplay loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;"></video>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,11,18,.55),transparent 45%);pointer-events:none;"></div>
+          <div style="position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(91,200,232,.55),transparent);pointer-events:none;animation:scanMove 6.5s linear infinite;"></div>
+          <div style="position:absolute;top:16px;right:16px;display:flex;align-items:center;gap:6px;background:rgba(6,11,18,.6);backdrop-filter:blur(6px);border-radius:999px;padding:5px 12px;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#fff;letter-spacing:.08em;">
+            <span style="width:7px;height:7px;border-radius:50%;background:#FF4A4A;animation:recBlink .9s ease-in-out infinite;"></span>REC · LIVE
+          </div>
+        </div>
+
+        <!-- floating system status card -->
+        <div data-status-card style="position:absolute;bottom:-26px;right:-22px;width:min(290px,82%);background:rgba(13,22,33,.86);backdrop-filter:blur(16px);border:1px solid #25435c;border-radius:16px;padding:18px 20px;box-shadow:0 24px 50px rgba(0,0,0,.5);will-change:transform;animation:floatY 7s ease-in-out infinite;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+            <div style="display:flex;align-items:center;gap:7px;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#9fb3c4;letter-spacing:.1em;"><span style="width:6px;height:6px;border-radius:50%;background:#00E676;box-shadow:0 0 8px #00E676;"></span>סטטוס מערכת</div>
+            <span style="font-family:'Share Tech Mono',monospace;font-size:.58rem;color:#00E676;letter-spacing:.1em;">פעיל</span>
+          </div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.15rem;font-weight:800;color:#fff;margin-bottom:3px;">מוצפן ומאובטח</div>
+          <div style="font-size:.74rem;color:#7d97a8;margin-bottom:15px;">ניטור חי · הגנת 24/7</div>
+          <div style="display:flex;align-items:center;gap:9px;background:#060B12;border-radius:9px;padding:9px 12px;margin-bottom:9px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            <span style="font-size:.78rem;color:#C8D8E8;font-weight:500;">כניסה ראשית · חי</span>
+            <span style="margin-right:auto;width:6px;height:6px;border-radius:50%;background:#00E676;"></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;padding:2px 12px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9fb3c4" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <span style="font-size:.78rem;color:#9fb3c4;">חיישן חצר · מוכן</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== TRUST TICKER ===================== -->
+  <div style="border-top:1px solid #14222f;border-bottom:1px solid #14222f;background:#080F18;overflow:hidden;position:relative;">
+    <div style="display:flex;width:max-content;animation:ticker 34s linear infinite;">
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">מורשה משרד הפנים</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">זמינות 24/7</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">מאושר משטרת ישראל</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">ISO 9001 מוסמך</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><path d="M1 6s4-2 11-2 11 2 11 2v6s-4 4-11 4S1 12 1 12V6z"/><circle cx="12" cy="9" r="2"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">מעל 800 לקוחות</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">מענה ישיר מאביב</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">מורשה משרד הפנים</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">זמינות 24/7</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">מאושר משטרת ישראל</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">ISO 9001 מוסמך</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><path d="M1 6s4-2 11-2 11 2 11 2v6s-4 4-11 4S1 12 1 12V6z"/><circle cx="12" cy="9" r="2"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">מעל 800 לקוחות</strong></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:15px 30px;white-space:nowrap;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg><strong style="color:#c2d2e0;font-size:.82rem;font-weight:600;">מענה ישיר מאביב</strong></div>
+    </div>
+  </div>
+
+  <!-- ===================== SERVICES / BENTO ===================== -->
+  <section id="services" style="padding:120px 0;background:#060B12;position:relative;overflow:hidden;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;">
+      <div data-reveal style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:46px;">
+        <div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#3A9BD5;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;">// המערכת המלאה</div>
+          <h2 style="font-family:'Rubik',sans-serif;font-size:clamp(2rem,4.2vw,3.1rem);font-weight:900;color:#fff;line-height:1.04;letter-spacing:-.02em;margin:0;">שליטה מלאה<br/>על כל שכבת הגנה</h2>
+        </div>
+        <p style="font-size:.95rem;color:#7d97a8;line-height:1.7;max-width:340px;margin:0;">חמש מערכות ליבה, משולבות בפלטפורמה אחת חזקה. לא מוכרים חומרה — בונים מערכת.</p>
+      </div>
+
+      <div data-bento style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+        <!-- featured: cameras -->
+        <article data-tilt data-reveal data-span="2" style="grid-column:span 2;position:relative;min-height:300px;border-radius:18px;overflow:hidden;border:1px solid #1E3A52;background:#0C1520;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;">
+          <image-slot id="bento-cam" style="position:absolute;inset:0;width:100%;height:100%;" shape="rect" fit="cover" placeholder="גרור תמונת מצלמה"></image-slot>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,11,18,.96) 8%,rgba(6,11,18,.45) 55%,rgba(6,11,18,.2));pointer-events:none;"></div>
+          <div style="position:absolute;top:18px;right:20px;display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#00E676;"><span style="width:6px;height:6px;border-radius:50%;background:#00E676;"></span>ONLINE · 4K</div>
+          <div style="position:absolute;bottom:0;right:0;left:0;padding:28px 30px;">
+            <div style="width:48px;height:48px;background:rgba(91,200,232,.12);border:1px solid rgba(91,200,232,.3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.8"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+            <h3 style="font-family:'Rubik',sans-serif;font-size:1.5rem;font-weight:800;color:#fff;margin:0 0 8px;">מצלמות 4K · ראיית לילה</h3>
+            <p style="font-size:.9rem;color:#9fb3c4;line-height:1.65;margin:0;max-width:440px;">מצלמות IP ברזולוציית 4K עם זיהוי תנועה AI ואחסון מוצפן בענן. תמונה חדה גם בחושך מוחלט — 240° שדה ראייה.</p>
+          </div>
+        </article>
+
+        <!-- alarms -->
+        <article data-tilt data-reveal style="position:relative;border-radius:18px;border:1px solid #1E3A52;background:#111C2A;padding:28px;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;display:flex;flex-direction:column;">
+          <div style="width:48px;height:48px;background:rgba(91,200,232,.08);border:1px solid rgba(91,200,232,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div>
+          <h3 style="font-family:'Rubik',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;margin:0 0 10px;">אזעקות היקפיות</h3>
+          <p style="font-size:.86rem;color:#7d97a8;line-height:1.65;margin:0 0 auto;">חיישני פריצה, תנועה וזכוכית מחוברים למוקד. התראה בטלפון תוך 3 שניות.</p>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#3A9BD5;margin-top:18px;">ARMED · 24/7</div>
+        </article>
+
+        <!-- comm -->
+        <article data-tilt data-reveal style="position:relative;border-radius:18px;border:1px solid #1E3A52;background:#111C2A;padding:28px;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;display:flex;flex-direction:column;">
+          <div style="width:48px;height:48px;background:rgba(91,200,232,.08);border:1px solid rgba(91,200,232,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.8"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1" fill="#5BC8E8"/></svg></div>
+          <h3 style="font-family:'Rubik',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;margin:0 0 10px;">תקשורת וגישה מרחוק</h3>
+          <p style="font-size:.86rem;color:#7d97a8;line-height:1.65;margin:0 0 auto;">תשתיות רשת מאובטחות וגישה מוצפנת לכל המצלמות — מהסמארטפון, מכל מקום בעולם.</p>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#3A9BD5;margin-top:18px;">ENCRYPTED</div>
+        </article>
+
+        <!-- unified app: featured wide -->
+        <article data-tilt data-reveal data-span="2" style="grid-column:span 2;position:relative;border-radius:18px;border:1px solid #1E3A52;background:linear-gradient(135deg,#0e2030,#0C1520);padding:30px;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;display:flex;align-items:center;gap:26px;flex-wrap:wrap;overflow:hidden;">
+          <div style="position:absolute;top:-40px;left:-30px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(91,200,232,.12),transparent 70%);pointer-events:none;"></div>
+          <div style="flex:1;min-width:200px;">
+            <div style="width:48px;height:48px;background:rgba(91,200,232,.12);border:1px solid rgba(91,200,232,.3);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3"/></svg></div>
+            <h3 style="font-family:'Rubik',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;margin:0 0 8px;">אפליקציה מאוחדת</h3>
+            <p style="font-size:.88rem;color:#9fb3c4;line-height:1.65;margin:0;max-width:330px;">כל הבית והעסק, ממשק אחד. שליטה מלאה — מצלמות, אזעקות, אינטרקום וקודנים — מכל מקום.</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <span style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5BC8E8;border:1px solid #25435c;border-radius:8px;padding:8px 14px;">iOS</span>
+            <span style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5BC8E8;border:1px solid #25435c;border-radius:8px;padding:8px 14px;">ANDROID</span>
+          </div>
+        </article>
+
+        <!-- vehicle -->
+        <article data-tilt data-reveal style="position:relative;border-radius:18px;border:1px solid #1E3A52;background:#111C2A;padding:28px;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;display:flex;flex-direction:column;">
+          <div style="width:48px;height:48px;background:rgba(91,200,232,.08);border:1px solid rgba(91,200,232,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <h3 style="font-family:'Rubik',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;margin:0 0 10px;">מיגון כלי רכב</h3>
+          <p style="font-size:.86rem;color:#7d97a8;line-height:1.65;margin:0 0 auto;">GPS, אנטי-גניבה ועצירה מרחוק לרכב פרטי ולצי עסקי. מיקום מדויק בזמן אמת.</p>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#3A9BD5;margin-top:18px;">TRACKING</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== STATS (black band) ===================== -->
+  <section style="background:#04080E;border-top:1px solid #14222f;border-bottom:1px solid #14222f;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;display:grid;grid-template-columns:repeat(4,1fr);" data-statsrow>
+      <div data-reveal style="padding:56px 24px;text-align:center;border-left:1px solid #14222f;"><span style="font-family:'Rubik',sans-serif;font-size:clamp(2.4rem,4.4vw,3.4rem);font-weight:900;color:#fff;line-height:1;display:block;margin-bottom:8px;letter-spacing:-.02em;"><span data-count="15">0</span><span style="color:#5BC8E8;">+</span></span><div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5A7A8A;letter-spacing:.12em;">שנות חדשנות</div></div>
+      <div data-reveal data-reveal-delay="80" style="padding:56px 24px;text-align:center;border-left:1px solid #14222f;"><span style="font-family:'Rubik',sans-serif;font-size:clamp(2.4rem,4.4vw,3.4rem);font-weight:900;color:#fff;line-height:1;display:block;margin-bottom:8px;letter-spacing:-.02em;"><span data-count="800">0</span><span style="color:#5BC8E8;">+</span></span><div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5A7A8A;letter-spacing:.12em;">נכסים מאובטחים</div></div>
+      <div data-reveal data-reveal-delay="160" style="padding:56px 24px;text-align:center;border-left:1px solid #14222f;"><span style="font-family:'Rubik',sans-serif;font-size:clamp(2.4rem,4.4vw,3.4rem);font-weight:900;color:#fff;line-height:1;display:block;margin-bottom:8px;letter-spacing:-.02em;">3<span style="color:#5BC8E8;">שנ'</span></span><div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5A7A8A;letter-spacing:.12em;">תגובת התראה</div></div>
+      <div data-reveal data-reveal-delay="240" style="padding:56px 24px;text-align:center;"><span style="font-family:'Rubik',sans-serif;font-size:clamp(2.4rem,4.4vw,3.4rem);font-weight:900;color:#fff;line-height:1;display:block;margin-bottom:8px;letter-spacing:-.02em;">99.9<span style="color:#5BC8E8;">%</span></span><div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5A7A8A;letter-spacing:.12em;">זמינות מערכת</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== DIMENSIONS (split + features) ===================== -->
+  <section id="dimensions" style="padding:120px 0;background:#060B12;position:relative;overflow:hidden;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;">
+      <div data-reveal style="margin-bottom:46px;">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#3A9BD5;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;">// הפילוסופיה שלנו</div>
+        <h2 style="font-family:'Rubik',sans-serif;font-size:clamp(2rem,4.2vw,3.1rem);font-weight:900;color:#fff;line-height:1.04;letter-spacing:-.02em;margin:0;">מאבטחים כל ממד</h2>
+      </div>
+
+      <div data-split style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+        <article data-tilt data-reveal style="position:relative;min-height:380px;border-radius:20px;overflow:hidden;border:1px solid #1E3A52;background:#0C1520;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;">
+          <image-slot id="dim-home" style="position:absolute;inset:0;width:100%;height:100%;" shape="rect" fit="cover" placeholder="גרור תמונת בית"></image-slot>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,11,18,.95) 12%,rgba(6,11,18,.4) 60%,rgba(6,11,18,.25));pointer-events:none;"></div>
+          <div style="position:absolute;bottom:0;right:0;left:0;padding:34px;">
+            <h3 style="font-family:'Rubik',sans-serif;font-size:1.8rem;font-weight:900;color:#fff;line-height:1.05;margin:0 0 12px;letter-spacing:-.02em;">בתים פרטיים<br/>ונכסי יוקרה</h3>
+            <p style="font-size:.9rem;color:#9fb3c4;line-height:1.65;margin:0 0 22px;max-width:360px;">שכבות אבטחה מותאמות לעולם הפרטי — מפנטהאוז עירוני ועד אחוזה. שקט נפשי שלא צריך להיות פשרה.</p>
+            <a href="#cta" style="display:inline-flex;align-items:center;gap:8px;background:#5BC8E8;color:#060B12;padding:11px 24px;border-radius:999px;font-weight:700;font-size:.86rem;text-decoration:none;" style-hover="box-shadow:0 8px 22px rgba(91,200,232,.4)">ייעוץ אישי</a>
+          </div>
+        </article>
+        <article data-tilt data-reveal data-reveal-delay="100" style="position:relative;min-height:380px;border-radius:20px;overflow:hidden;border:1px solid #1E3A52;background:#0C1520;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;">
+          <image-slot id="dim-biz" style="position:absolute;inset:0;width:100%;height:100%;" shape="rect" fit="cover" placeholder="גרור תמונת עסק"></image-slot>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,11,18,.95) 12%,rgba(6,11,18,.4) 60%,rgba(6,11,18,.25));pointer-events:none;"></div>
+          <div style="position:absolute;bottom:0;right:0;left:0;padding:34px;">
+            <h3 style="font-family:'Rubik',sans-serif;font-size:1.8rem;font-weight:900;color:#fff;line-height:1.05;margin:0 0 12px;letter-spacing:-.02em;">עסקים<br/>ומוסדות</h3>
+            <p style="font-size:.9rem;color:#9fb3c4;line-height:1.65;margin:0 0 22px;max-width:360px;">מעקב ברמה תעשייתית, בקרת גישה וניהול ריבוי מיקומים — לעסק קטן ולמערך לוגיסטי גלובלי כאחד.</p>
+            <a href="#cta" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:#fff;padding:11px 24px;border-radius:999px;font-weight:700;font-size:.86rem;text-decoration:none;border:1px solid #2f5871;" style-hover="border-color:#5BC8E8;background:rgba(91,200,232,.06)">פנייה עסקית</a>
+          </div>
+        </article>
+      </div>
+
+      <div data-features style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+        <div data-reveal style="background:#0C1520;border:1px solid #14222f;border-radius:14px;padding:26px;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#3A9BD5;letter-spacing:.14em;margin-bottom:14px;">// 01</div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:8px;">3 שניות. לא 30.</div>
+          <div style="font-size:.83rem;color:#7d97a8;line-height:1.6;">מזיהוי פרצה ועד התראה בטלפון — מהר יותר ממה שאתה מצפה.</div>
+        </div>
+        <div data-reveal data-reveal-delay="70" style="background:#0C1520;border:1px solid #14222f;border-radius:14px;padding:26px;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#3A9BD5;letter-spacing:.14em;margin-bottom:14px;">// 02</div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:8px;">מחיר קבוע</div>
+          <div style="font-size:.83rem;color:#7d97a8;line-height:1.6;">הצעה מפורטת מראש. בלי תוספות בדיעבד. מה שהוסכם — מה שמשלמים.</div>
+        </div>
+        <div data-reveal data-reveal-delay="140" style="background:#0C1520;border:1px solid #14222f;border-radius:14px;padding:26px;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#3A9BD5;letter-spacing:.14em;margin-bottom:14px;">// 03</div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:8px;">התקנה נכונה</div>
+          <div style="font-size:.83rem;color:#7d97a8;line-height:1.6;">כל מתקין מוסמך. שולחים מומחה אבטחה — לא "מישהו שיסתדר".</div>
+        </div>
+        <div data-reveal data-reveal-delay="210" style="background:#0C1520;border:1px solid #14222f;border-radius:14px;padding:26px;">
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#3A9BD5;letter-spacing:.14em;margin-bottom:14px;">// 04</div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:8px;">אביב עונה בעצמו</div>
+          <div style="font-size:.83rem;color:#7d97a8;line-height:1.6;">לא שלוחה 4. לא טיקט. ישירות עם בעל העסק שאחראי על המערכת שלך.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TECH (feature list + video) ===================== -->
+  <section id="tech" style="padding:120px 0;background:#0C1520;position:relative;overflow:hidden;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;display:grid;grid-template-columns:1fr 1fr;gap:54px;align-items:center;" data-tech-grid>
+      <div data-reveal>
+        <h2 style="font-family:'Rubik',sans-serif;font-size:clamp(2rem,4.2vw,3rem);font-weight:900;color:#fff;line-height:1.02;letter-spacing:-.02em;margin:0 0 8px;">טכנולוגיה עליונה.</h2>
+        <h2 style="font-family:'Rubik',sans-serif;font-size:clamp(2rem,4.2vw,3rem);font-weight:900;color:transparent;-webkit-text-stroke:1.4px #2f5871;line-height:1.02;letter-spacing:-.02em;margin:0 0 36px;">כוח בלתי-נראה.</h2>
+
+        <div style="display:flex;flex-direction:column;gap:22px;">
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <div style="width:30px;height:30px;flex-shrink:0;border-radius:8px;background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.3);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div><div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:4px;">התראות למידה עמוקה</div><div style="font-size:.86rem;color:#7d97a8;line-height:1.6;">רשתות נוירונים מבחינות בין אדם, רכב וחיה בדיוק של 99.5% — פחות התראות שווא.</div></div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <div style="width:30px;height:30px;flex-shrink:0;border-radius:8px;background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.3);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div><div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:4px;">ראיית לילה בכל הספקטרום</div><div style="font-size:.86rem;color:#7d97a8;line-height:1.6;">חיישנים תרמיים ואיסוף אור מתקדם — תמונה חדה בחושך מוחלט.</div></div>
+          </div>
+          <div style="display:flex;gap:16px;align-items:flex-start;">
+            <div style="width:30px;height:30px;flex-shrink:0;border-radius:8px;background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.3);display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div><div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:4px;">אחסון Zero-Trust</div><div style="font-size:.86rem;color:#7d97a8;line-height:1.6;">הצפנת AES-256 לכל פריים, נשמר בענן פרטי — מוקד מאוייש 24/7 רואה הכל.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="position:relative;perspective:1400px;" data-reveal data-reveal-delay="120">
+        <div data-tech-video style="position:relative;border-radius:18px;overflow:hidden;border:1px solid #1E3A52;box-shadow:0 30px 70px rgba(0,0,0,.5);aspect-ratio:16/11;background:#060B12;will-change:transform;">
+          <video src="assets/hero-cam.mp4" autoplay loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.78) contrast(1.05);"></video>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,11,18,.5),transparent 50%);pointer-events:none;"></div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;background:rgba(91,200,232,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 10px rgba(91,200,232,.18);"><svg width="22" height="22" viewBox="0 0 24 24" fill="#060B12" style="transform:scaleX(-1);margin-right:-2px;"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+          <div style="position:absolute;bottom:16px;right:16px;display:flex;align-items:center;gap:9px;background:rgba(13,22,33,.85);backdrop-filter:blur(10px);border:1px solid #25435c;border-radius:11px;padding:11px 15px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#FF4A4A;animation:recBlink 1s ease-in-out infinite;"></span>
+            <div><div style="font-size:.78rem;color:#fff;font-weight:700;">התראת חדירה</div><div style="font-family:'Share Tech Mono',monospace;font-size:.58rem;color:#9fb3c4;">CAM-04 · 02:14</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIALS ===================== -->
+  <section id="testi" style="padding:120px 0;background:#060B12;position:relative;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;">
+      <div data-reveal style="text-align:center;margin-bottom:50px;">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#3A9BD5;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;">// קולות של ביטחון</div>
+        <h2 style="font-family:'Rubik',sans-serif;font-size:clamp(2rem,4.2vw,3.1rem);font-weight:900;color:#fff;line-height:1.04;letter-spacing:-.02em;margin:0;">לא חיפשנו ביקורות — קיבלנו אותן</h2>
+      </div>
+      <div data-testi-grid style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;perspective:1100px;">
+        <article data-tilt data-reveal style="background:#0C1520;border:1px solid #1E3A52;border-radius:16px;padding:32px;position:relative;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;">
+          <div style="display:flex;gap:3px;color:#5BC8E8;font-size:.9rem;margin-bottom:18px;">★★★★★</div>
+          <p style="font-size:.92rem;color:#C8D8E8;line-height:1.75;margin:0 0 24px;">"אביב הגיע ביום למחרת, סקר הכל, הסביר בלי עגה טכנית. אחרי שלוש שנים המצלמות עובדות כאילו הותקנו אתמול."</p>
+          <div style="display:flex;align-items:center;gap:12px;"><div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#3A9BD5,#0C1520);border:1px solid #1E3A52;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">ד</div><div><strong style="display:block;font-size:.9rem;color:#fff;">דוד כהן</strong><span style="font-family:'Share Tech Mono',monospace;font-size:.64rem;color:#5A7A8A;">בעל מרכול · בני ברק</span></div></div>
+        </article>
+        <article data-tilt data-reveal data-reveal-delay="90" style="background:#5BC8E8;border:1px solid #5BC8E8;border-radius:16px;padding:32px;position:relative;transition:transform .4s,box-shadow .3s;will-change:transform;">
+          <div style="display:flex;gap:3px;color:#060B12;font-size:.9rem;margin-bottom:18px;">★★★★★</div>
+          <p style="font-size:.92rem;color:#072030;line-height:1.75;margin:0 0 24px;font-weight:500;">"ניסיתי שתי חברות לפני AD. אביב הציע תכנון שנכון לנו — לא רק הכי יקר. המערכת עבדה מהיום הראשון."</p>
+          <div style="display:flex;align-items:center;gap:12px;"><div style="width:42px;height:42px;border-radius:50%;background:#072030;display:flex;align-items:center;justify-content:center;color:#5BC8E8;font-weight:700;">ר</div><div><strong style="display:block;font-size:.9rem;color:#072030;">רונית לוי</strong><span style="font-family:'Share Tech Mono',monospace;font-size:.64rem;color:#1a4258;">משרד עו"ד · תל אביב</span></div></div>
+        </article>
+        <article data-tilt data-reveal data-reveal-delay="180" style="background:#0C1520;border:1px solid #1E3A52;border-radius:16px;padding:32px;position:relative;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;">
+          <div style="display:flex;gap:3px;color:#5BC8E8;font-size:.9rem;margin-bottom:18px;">★★★★★</div>
+          <p style="font-size:.92rem;color:#C8D8E8;line-height:1.75;margin:0 0 24px;">"בלילה הראשון זוהתה תנועה, קיבלתי התראה לפני שהאזעקה אפילו הפעילה רעש. מאז השינה שלי שקטה יותר."</p>
+          <div style="display:flex;align-items:center;gap:12px;"><div style="width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,#3A9BD5,#0C1520);border:1px solid #1E3A52;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;">מ</div><div><strong style="display:block;font-size:.9rem;color:#fff;">משה אברהם</strong><span style="font-family:'Share Tech Mono',monospace;font-size:.64rem;color:#5A7A8A;">בעל נכס · פרדס חנה</span></div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SELECTOR ===================== -->
+  <section id="selector" style="padding:120px 0;background:#0C1520;position:relative;overflow:hidden;border-top:1px solid #14222f;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;">
+      <div data-reveal style="text-align:center;margin-bottom:46px;">
+        <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#3A9BD5;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;">// התאמה אישית</div>
+        <h2 style="font-family:'Rubik',sans-serif;font-size:clamp(2rem,4.2vw,3.1rem);font-weight:900;color:#fff;line-height:1.04;letter-spacing:-.02em;margin:0;">בחר את המערכת שמתאימה לך</h2>
+        <p style="font-size:.95rem;color:#7d97a8;margin:12px auto 0;line-height:1.7;max-width:480px;">לחץ על סוג הנכס שלך — נבנה עבורך חבילה מדויקת</p>
+      </div>
+
+      <div data-sel-grid style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+        <div data-sel-card="home" onClick="{{ selectHome }}" style="background:#0C1520;border:1px solid #1E3A52;border-radius:16px;padding:30px 22px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s,border-color .3s;" style-hover="transform:translateY(-4px);border-color:rgba(91,200,232,.5)">
+          <div data-sel-badge style="position:absolute;top:12px;left:12px;width:22px;height:22px;background:#5BC8E8;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:opacity .3s,transform .3s;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#060B12" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div style="width:58px;height:58px;margin:0 auto 16px;background:rgba(91,200,232,.07);border:1px solid rgba(91,200,232,.2);border-radius:16px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.6"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:6px;">בית פרטי</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#5A7A8A;letter-spacing:.06em;">HOME</div>
+        </div>
+        <div data-sel-card="biz" onClick="{{ selectBiz }}" style="background:#0C1520;border:1px solid #1E3A52;border-radius:16px;padding:30px 22px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s,border-color .3s;" style-hover="transform:translateY(-4px);border-color:rgba(91,200,232,.5)">
+          <div data-sel-badge style="position:absolute;top:12px;left:12px;width:22px;height:22px;background:#5BC8E8;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:opacity .3s,transform .3s;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#060B12" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div style="width:58px;height:58px;margin:0 auto 16px;background:rgba(91,200,232,.07);border:1px solid rgba(91,200,232,.2);border-radius:16px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.6"><path d="M3 9h18v10a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M3 9l2-5h14l2 5"/><line x1="12" y1="9" x2="12" y2="21"/></svg></div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:6px;">עסק / חנות</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#5A7A8A;letter-spacing:.06em;">BUSINESS</div>
+        </div>
+        <div data-sel-card="office" onClick="{{ selectOffice }}" style="background:#0C1520;border:1px solid #1E3A52;border-radius:16px;padding:30px 22px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s,border-color .3s;" style-hover="transform:translateY(-4px);border-color:rgba(91,200,232,.5)">
+          <div data-sel-badge style="position:absolute;top:12px;left:12px;width:22px;height:22px;background:#5BC8E8;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:opacity .3s,transform .3s;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#060B12" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div style="width:58px;height:58px;margin:0 auto 16px;background:rgba(91,200,232,.07);border:1px solid rgba(91,200,232,.2);border-radius:16px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.6"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 21V9h4v12M16 21V3"/><line x1="2" y1="9" x2="16" y2="9"/></svg></div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:6px;">משרד</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#5A7A8A;letter-spacing:.06em;">OFFICE</div>
+        </div>
+        <div data-sel-card="building" onClick="{{ selectBuilding }}" style="background:#0C1520;border:1px solid #1E3A52;border-radius:16px;padding:30px 22px;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:transform .3s,border-color .3s;" style-hover="transform:translateY(-4px);border-color:rgba(91,200,232,.5)">
+          <div data-sel-badge style="position:absolute;top:12px;left:12px;width:22px;height:22px;background:#5BC8E8;border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(0);transition:opacity .3s,transform .3s;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#060B12" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div style="width:58px;height:58px;margin:0 auto 16px;background:rgba(91,200,232,.07);border:1px solid rgba(91,200,232,.2);border-radius:16px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5BC8E8" stroke-width="1.6"><rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22V12h6v10"/><line x1="9" y1="6" x2="9.01" y2="6" stroke-width="3"/><line x1="15" y1="6" x2="15.01" y2="6" stroke-width="3"/></svg></div>
+          <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:6px;">בניין / מוסד</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#5A7A8A;letter-spacing:.06em;">ENTERPRISE</div>
+        </div>
+      </div>
+
+      <sc-if value="{{ pkgOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#0C1520;border:1px solid rgba(91,200,232,.35);border-radius:18px;overflow:hidden;animation:panelIn .5s cubic-bezier(.2,.7,.2,1);">
+          <div style="display:grid;grid-template-columns:1.3fr 1fr;" data-pkg-grid>
+            <div style="padding:42px;border-left:1px solid #1E3A52;">
+              <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(91,200,232,.1);border:1px solid rgba(91,200,232,.25);border-radius:999px;padding:6px 16px;font-family:'Share Tech Mono',monospace;font-size:.66rem;color:#5BC8E8;margin-bottom:18px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ pkgBadge }}
+              </div>
+              <div style="font-family:'Rubik',sans-serif;font-size:1.7rem;font-weight:900;color:#fff;margin-bottom:10px;letter-spacing:-.02em;">{{ pkgName }}</div>
+              <div style="font-size:.92rem;color:#7d97a8;line-height:1.7;margin-bottom:26px;">{{ pkgDesc }}</div>
+              <div style="display:flex;flex-direction:column;gap:11px;">
+                <sc-for list="{{ pkgServices }}" as="svc" hint-placeholder-count="5">
+                  <div style="display:flex;align-items:center;gap:11px;font-size:.9rem;color:#C8D8E8;">
+                    <div style="width:20px;height:20px;flex-shrink:0;background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);border-radius:50%;display:flex;align-items:center;justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#00E676" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                    <span>{{ svc }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="padding:42px;display:flex;flex-direction:column;justify-content:center;gap:16px;">
+              <div>
+                <div style="font-family:'Rubik',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:5px;">מוכן להתחיל?</div>
+                <div style="font-size:.84rem;color:#7d97a8;line-height:1.6;">שלח הודעה עכשיו — אביב יחזור אליך תוך שעה עם הצעת מחיר מפורטת.</div>
+              </div>
+              <a href="{{ pkgWa }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:9px;background:#25D366;color:#fff;padding:14px 24px;border-radius:999px;font-weight:700;font-size:.92rem;text-decoration:none;justify-content:center;box-shadow:0 4px 18px rgba(37,211,102,.3);" style-hover="box-shadow:0 0 28px rgba(37,211,102,.5);transform:translateY(-2px)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+                קבל הצעה בוואטסאפ
+              </a>
+              <a href="tel:0509300082" style="display:inline-flex;align-items:center;gap:9px;background:transparent;color:#C8D8E8;padding:14px 24px;border-radius:999px;font-weight:700;font-size:.92rem;text-decoration:none;border:1px solid #1E3A52;justify-content:center;" style-hover="border-color:#5BC8E8;color:#fff">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+                התקשר לאביב
+              </a>
+              <div style="font-family:'Share Tech Mono',monospace;font-size:.72rem;color:#5A7A8A;border-top:1px solid #1E3A52;padding-top:16px;color:#5BC8E8;">{{ pkgPrice }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section id="cta" style="padding:120px 0;background:#060B12;position:relative;overflow:hidden;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;">
+      <div data-reveal style="position:relative;border-radius:26px;overflow:hidden;border:1px solid #1E3A52;background:linear-gradient(135deg,#0e2030,#070d15);padding:64px 56px;">
+        <div data-par="0.3" style="position:absolute;top:-30%;left:-6%;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(91,200,232,.16),transparent 70%);pointer-events:none;"></div>
+        <div style="position:relative;z-index:1;display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center;" data-cta-grid>
+          <div>
+            <h2 style="font-family:'Rubik',sans-serif;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:900;color:#fff;line-height:1.0;letter-spacing:-.03em;margin:0 0 18px;">לאבטח<br/>את מה שחשוב</h2>
+            <p style="font-size:1rem;color:#9fb3c4;line-height:1.7;margin:0 0 32px;max-width:420px;">הצטרף ל-800+ בתים ועסקים מוגנים. אביב יגיע לנכס, יסקור, ויבנה פתרון שמתאים בדיוק לך — תוך 24 שעות.</p>
+            <div style="display:flex;gap:14px;flex-wrap:wrap;">
+              <a href="https://wa.me/9720509300082" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;background:#5BC8E8;color:#060B12;padding:15px 30px;border-radius:999px;font-weight:700;font-size:.96rem;text-decoration:none;" style-hover="transform:translateY(-2px);box-shadow:0 12px 30px rgba(91,200,232,.4)">קבל הצעה חינם</a>
+              <a href="tel:0509300082" style="display:inline-flex;align-items:center;gap:9px;background:transparent;color:#fff;padding:15px 28px;border-radius:999px;font-weight:600;font-size:.96rem;text-decoration:none;border:1px solid #2f5871;" style-hover="border-color:#5BC8E8">דבר עם מומחה</a>
+            </div>
+          </div>
+          <form action="mailto:aviv@ad-security.co.il" method="post" enctype="text/plain" style="background:rgba(6,11,18,.5);border:1px solid #1E3A52;border-radius:16px;padding:30px;">
+            <div style="font-family:'Rubik',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:18px;">השאר פרטים — נחזור תוך שעה</div>
+            <input type="text" name="name" placeholder="שם מלא" required autocomplete="name" style="width:100%;background:#060B12;border:1px solid #1E3A52;border-radius:10px;padding:12px 15px;color:#fff;font-family:'Heebo',sans-serif;font-size:.9rem;direction:rtl;outline:none;margin-bottom:12px;" style-focus="border-color:#5BC8E8"/>
+            <input type="tel" name="phone" placeholder="טלפון" required autocomplete="tel" style="width:100%;background:#060B12;border:1px solid #1E3A52;border-radius:10px;padding:12px 15px;color:#fff;font-family:'Heebo',sans-serif;font-size:.9rem;direction:rtl;outline:none;margin-bottom:12px;" style-focus="border-color:#5BC8E8"/>
+            <textarea name="message" placeholder="מה אתה מחפש?" style="width:100%;background:#060B12;border:1px solid #1E3A52;border-radius:10px;padding:12px 15px;color:#fff;font-family:'Heebo',sans-serif;font-size:.9rem;direction:rtl;outline:none;min-height:80px;resize:vertical;margin-bottom:14px;" style-focus="border-color:#5BC8E8"></textarea>
+            <button type="submit" style="width:100%;background:#5BC8E8;color:#060B12;border:none;padding:14px;border-radius:999px;font-family:'Heebo',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:box-shadow .25s;" style-hover="box-shadow:0 0 24px rgba(91,200,232,.4)">שלח פנייה</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== NEWSLETTER ===================== -->
+  <section style="padding:80px 0;background:#0C1520;border-top:1px solid #14222f;">
+    <div data-reveal style="max-width:620px;margin:0 auto;padding:0 28px;text-align:center;">
+      <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#3A9BD5;letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;">// העדכון הביטחוני</div>
+      <h2 style="font-family:'Rubik',sans-serif;font-size:clamp(1.5rem,3vw,2rem);font-weight:900;color:#fff;margin:0 0 10px;letter-spacing:-.02em;">תובנות שבועיות על הגנת נכסים</h2>
+      <p style="font-size:.9rem;color:#7d97a8;margin:0 0 26px;">טיפים, מגמות וטכנולוגיות אבטחה לבית חכם — ישירות למייל.</p>
+      <form action="mailto:aviv@ad-security.co.il" method="post" enctype="text/plain" style="display:flex;gap:10px;max-width:440px;margin:0 auto;flex-wrap:wrap;">
+        <input type="email" name="email" placeholder="כתובת האימייל שלך" required style="flex:1;min-width:200px;background:#060B12;border:1px solid #1E3A52;border-radius:999px;padding:13px 20px;color:#fff;font-family:'Heebo',sans-serif;font-size:.9rem;direction:rtl;outline:none;" style-focus="border-color:#5BC8E8"/>
+        <button type="submit" style="background:#5BC8E8;color:#060B12;border:none;padding:13px 28px;border-radius:999px;font-family:'Heebo',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;">הרשמה</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="background:#04080E;border-top:1px solid #14222f;padding:60px 0 30px;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;">
+      <div data-foot-grid style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:46px;">
+        <div>
+          <a href="#hero" style="display:flex;align-items:center;gap:11px;text-decoration:none;margin-bottom:16px;">
+            <div style="width:34px;height:34px;background:#5BC8E8;border-radius:9px;display:flex;align-items:center;justify-content:center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#060B12" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <strong style="color:#fff;font-family:'Rubik',sans-serif;font-size:1.15rem;font-weight:800;">AD<span style="color:#5BC8E8;">SECURE</span></strong>
+          </a>
+          <p style="font-size:.86rem;color:#5A7A8A;line-height:1.7;max-width:300px;margin:0;">פתרונות אבטחה מהדור הבא — טכנולוגיית AI והגנה מקצועית לבית ולעסק המודרני. לא מוכרים שקט נפשי, מבטיחים אותו.</p>
+        </div>
+        <div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5A7A8A;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px;">פתרונות</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;margin:0;padding:0;">
+            <li><a href="#services" style="color:#9fb3c4;font-size:.87rem;text-decoration:none;" style-hover="color:#5BC8E8">מצלמות אבטחה</a></li>
+            <li><a href="#services" style="color:#9fb3c4;font-size:.87rem;text-decoration:none;" style-hover="color:#5BC8E8">מערכות אזעקה</a></li>
+            <li><a href="#services" style="color:#9fb3c4;font-size:.87rem;text-decoration:none;" style-hover="color:#5BC8E8">בקרת גישה</a></li>
+            <li><a href="#services" style="color:#9fb3c4;font-size:.87rem;text-decoration:none;" style-hover="color:#5BC8E8">מיגון רכב</a></li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5A7A8A;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px;">החברה</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;margin:0;padding:0;">
+            <li><a href="#dimensions" style="color:#9fb3c4;font-size:.87rem;text-decoration:none;" style-hover="color:#5BC8E8">עלינו</a></li>
+            <li><a href="#testi" style="color:#9fb3c4;font-size:.87rem;text-decoration:none;" style-hover="color:#5BC8E8">לקוחות</a></li>
+            <li><a href="#tech" style="color:#9fb3c4;font-size:.87rem;text-decoration:none;" style-hover="color:#5BC8E8">טכנולוגיה</a></li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:.62rem;color:#5A7A8A;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px;">צור קשר</div>
+          <div style="display:flex;align-items:center;gap:9px;color:#9fb3c4;font-size:.87rem;margin-bottom:12px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 11a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg><a href="tel:0509300082" dir="ltr" style="color:#9fb3c4;text-decoration:none;" style-hover="color:#5BC8E8">050-9300082</a></div>
+          <div style="display:flex;align-items:center;gap:9px;color:#9fb3c4;font-size:.87rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3A9BD5" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>24/7 — תמיד זמינים</span></div>
+        </div>
+      </div>
+      <div style="border-top:1px solid #14222f;padding-top:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <p style="font-family:'Share Tech Mono',monospace;font-size:.66rem;color:#5A7A8A;letter-spacing:.05em;margin:0;">© 2026 AD SECURE SYSTEMS · כל הזכויות שמורות</p>
+        <div style="display:inline-flex;align-items:center;gap:6px;border:1px solid #1E3A52;border-radius:999px;padding:5px 14px;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#5A7A8A;letter-spacing:.06em;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>מורשה · משרד הפנים</div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#5BC8E8&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;motionIntensity&quot;:{&quot;editor&quot;:&quot;float&quot;,&quot;default&quot;:1,&quot;min&quot;:0.2,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;tsType&quot;:&quot;number&quot;}}">
+class Component extends DCLogic {
+  state = { mobOpen:false, pkgOpen:false, pkgKey:null };
+
+  get ACCENT(){ return this.props.accentColor || '#5BC8E8'; }
+  get INTENSITY(){ const v = this.props.motionIntensity; return (v==null?1:v); }
+
+  PACKAGES = {
+    home:{ badge:'בית פרטי', name:'חבילת הגנת הבית', desc:'פתרון מלא לבית — גישה מרחוק, התראות בזמן אמת, והתקנה ביום אחד. כי השקט הביתי לא צריך להיות פשרה.', services:['2–4 מצלמות חיצוניות 4K','מערכת אזעקה עם 6 חיישנים','אינטרקום עם וידאו לדלת הכניסה','אפליקציה לסמארטפון — גישה מכל מקום','אחריות 3 שנים וביקורת שנתית'], price:'החל מ־₪4,500 כולל התקנה', wa:'שלום אביב, אני מעוניין בחבילת הגנת הבית. אשמח לקבל הצעת מחיר.' },
+    biz:{ badge:'עסק / חנות', name:'חבילת אבטחת עסק', desc:'כשהעסק סגור — המערכת שלנו עובדת. הכל מנוטר, הכל מוקלט. מניעת גניבות, הוכחות משפטיות, שקט נפשי.', services:['4–8 מצלמות IP 4K פנים/חוץ','מערכת אזעקה מקצועית עם מוקד','בקרת גישה קודנים לדלתות','גיבוי ענן מוצפן — 30 יום','ניהול מרחוק ודוחות אירועים'], price:'החל מ־₪7,500 כולל התקנה', wa:'שלום אביב, אני מעוניין בחבילת אבטחת עסק. אשמח לקבל הצעת מחיר.' },
+    office:{ badge:'משרד', name:'חבילת בקרת משרד', desc:'שליטה מלאה על הגישה — מי נכנס, מתי, ואיפה. בלי אחריות לא ברורה, בלי דלתות פתוחות לא מוסברות.', services:['מצלמות פנימיות וחיצוניות','בקרת גישה ביומטרית / כרטיסים','אינטרקום לכניסה ראשית','מוניטורינג פנימי בזמן אמת','דוחות נוכחות ואירועי כניסה'], price:'החל מ־₪9,500 כולל התקנה', wa:'שלום אביב, אני מעוניין בחבילת בקרת משרד. אשמח לקבל הצעת מחיר.' },
+    building:{ badge:'בניין / מוסד', name:'חבילת Enterprise', desc:'פתרון לבניינים ומוסדות — מנוהל מרחוק, מוגן 24/7. ניהול ריבוי קומות, כניסות ומצלמות ממסך אחד.', services:['מצלמות HD לכל קומה וכניסה','מערכת אזעקה מרכזית מקושרת','ניהול ריבוי מיקומים מרחוק','שליטה מרובת משתמשים עם הרשאות','תמיכה VIP + תחזוקה שוטפת חוזית'], price:'מחיר לפי סקר — נתאים לבניין שלך', wa:'שלום אביב, אני מעוניין בחבילת אבטחה לבניין/מוסד. אשמח לתיאום סקר.' }
+  };
+
+  refRoot = (el)=>{ if(el){ this.root = el; } };
+
+  componentDidMount(){
+    this.mqMobile = window.matchMedia('(max-width:900px)');
+    this.reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    this.mouse = { x:0, y:0, tx:0, ty:0 };
+    this._timers = [];
+    this._ios = [];
+    requestAnimationFrame(()=>{ this.collect(); this.init(); });
+  }
+
+  componentWillUnmount(){
+    cancelAnimationFrame(this._raf);
+    (this._timers||[]).forEach(t=>clearInterval(t));
+    (this._ios||[]).forEach(o=>o.disconnect());
+    window.removeEventListener('mousemove', this._onMove);
+    window.removeEventListener('resize', this._onResize);
+  }
+
+  collect(){
+    const r = this.root; if(!r) return;
+    this.nav = r.querySelector('[data-nav]');
+    this.navLinks = r.querySelector('[data-navlinks]');
+    this.navCta = r.querySelector('[data-navcta]');
+    this.navLogin = r.querySelector('[data-navlogin]');
+    this.hbg = r.querySelector('[data-hbg]');
+    this.parallax = [...r.querySelectorAll('[data-par]')];
+    this.heroScene = r.querySelector('[data-hero]');
+    this.heroVideo = r.querySelector('[data-hero-video]');
+    this.heroContent = r.querySelector('[data-hero-content]');
+    this.statusCard = r.querySelector('[data-status-card]');
+    this.techVideo = r.querySelector('[data-tech-video]');
+    this.tilts = [...r.querySelectorAll('[data-tilt]')];
+    this.reveals = [...r.querySelectorAll('[data-reveal]')];
+    this.counters = [...r.querySelectorAll('[data-count]')];
+    this.bento = r.querySelector('[data-bento]');
+    this.bentoSpans = [...r.querySelectorAll('[data-bento] [data-span]')];
+    this.grids2 = [...r.querySelectorAll('[data-split],[data-tech-grid],[data-cta-grid],[data-pkg-grid]')];
+    this.grids4 = [...r.querySelectorAll('[data-statsrow],[data-features],[data-sel-grid]')];
+    this.grids3 = [...r.querySelectorAll('[data-testi-grid]')];
+    this.heroGrid = r.querySelector('[data-hero-grid]');
+    this.footGrid = r.querySelector('[data-foot-grid]');
+    this.videos = [...r.querySelectorAll('video')];
+  }
+
+  init(){
+    this.startVideos();
+    this.applyResponsive();
+    this.setupReveal();
+    this.setupTilt();
+    this.setupCounters();
+    this._onMove = (e)=>{ this.mouse.tx=(e.clientX/window.innerWidth-0.5)*2; this.mouse.ty=(e.clientY/window.innerHeight-0.5)*2; };
+    this._onResize = ()=>{ this.applyResponsive(); };
+    window.addEventListener('mousemove', this._onMove, {passive:true});
+    window.addEventListener('resize', this._onResize, {passive:true});
+    const loop = ()=>{ this.frame(); this._raf = requestAnimationFrame(loop); };
+    this._raf = requestAnimationFrame(loop);
+  }
+
+  startVideos(){
+    (this.videos||[]).forEach(vid=>{
+      vid.muted = true; vid.defaultMuted = true; vid.setAttribute('muted','');
+      vid.playsInline = true; vid.setAttribute('playsinline','');
+      vid.loop = true; vid.setAttribute('loop','');
+      vid.addEventListener('ended', ()=>{ vid.currentTime = 0; const p = vid.play(); if(p&&p.catch) p.catch(()=>{}); });
+      const p = vid.play(); if(p&&p.catch) p.catch(()=>{});
+    });
+    const kick = ()=>{ (this.videos||[]).forEach(v=>{ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }); };
+    window.addEventListener('scroll', kick, {passive:true, once:true});
+    window.addEventListener('touchstart', kick, {passive:true, once:true});
+    window.addEventListener('click', kick, {once:true});
+  }
+
+  applyResponsive(){
+    const m = this.mqMobile.matches;
+    if(this.navLinks) this.navLinks.style.display = m ? 'none' : 'flex';
+    if(this.navCta) this.navCta.style.display = m ? 'none' : 'inline-flex';
+    if(this.navLogin) this.navLogin.style.display = m ? 'none' : 'inline-block';
+    if(this.hbg) this.hbg.style.display = m ? 'flex' : 'none';
+    if(this.heroGrid) this.heroGrid.style.gridTemplateColumns = m ? '1fr' : '1fr 1fr';
+    this.grids2.forEach(g=>{ g.style.gridTemplateColumns = m ? '1fr' : (g.hasAttribute('data-pkg-grid')?'1.3fr 1fr':(g.hasAttribute('data-cta-grid')?'1.2fr 1fr':(g.hasAttribute('data-tech-grid')?'1fr 1fr':'1fr 1fr'))); });
+    this.grids3.forEach(g=>{ g.style.gridTemplateColumns = m ? '1fr' : 'repeat(3,1fr)'; });
+    this.grids4.forEach(g=>{ g.style.gridTemplateColumns = m ? (g.hasAttribute('data-statsrow')?'repeat(2,1fr)':'1fr') : 'repeat(4,1fr)'; });
+    if(this.bento) this.bento.style.gridTemplateColumns = m ? '1fr' : 'repeat(3,1fr)';
+    this.bentoSpans.forEach(el=>{ el.style.gridColumn = m ? 'auto' : ('span '+(el.dataset.span||'1')); });
+    if(this.footGrid) this.footGrid.style.gridTemplateColumns = m ? '1fr 1fr' : '1.6fr 1fr 1fr 1fr';
+  }
+
+  frame(){
+    const vh = window.innerHeight, sy = window.scrollY;
+    const mobile = this.mqMobile.matches;
+    const amt = (mobile?0.4:1) * this.INTENSITY * (this.reduce?0:1);
+    this.mouse.x += (this.mouse.tx - this.mouse.x) * 0.07;
+    this.mouse.y += (this.mouse.ty - this.mouse.y) * 0.07;
+
+    if(this.nav){
+      const st = sy > 50;
+      this.nav.style.background = st ? 'rgba(6,11,18,.9)' : 'transparent';
+      this.nav.style.backdropFilter = st ? 'blur(16px)' : 'none';
+      this.nav.style.webkitBackdropFilter = st ? 'blur(16px)' : 'none';
+      this.nav.style.borderBottomColor = st ? 'rgba(58,155,213,.12)' : 'transparent';
+      this.nav.style.padding = st ? '13px 0' : '22px 0';
+    }
+
+    for(const el of this.parallax){
+      const sp = parseFloat(el.dataset.par)||0;
+      const rect = el.getBoundingClientRect();
+      const c = rect.top + rect.height/2;
+      const rel = (c - vh/2)/vh;
+      const ty = -rel * sp * 110 * amt;
+      el.style.transform = 'translate3d(0,'+ty.toFixed(1)+'px,0)';
+    }
+
+    if(this.heroScene){
+      const hr = this.heroScene.getBoundingClientRect();
+      const hp = Math.max(0, Math.min(1, -hr.top / vh));
+      if(this.heroVideo){
+        const rx = (-this.mouse.y*7 + hp*4) * (mobile?0:1) * this.INTENSITY;
+        const ry = (this.mouse.x*9) * (mobile?0:1) * this.INTENSITY;
+        this.heroVideo.style.transform = 'perspective(1200px) rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg) scale('+(1+hp*0.06).toFixed(3)+')';
+      }
+      if(this.statusCard){
+        const sx = this.mouse.x*-14*(mobile?0:1)*this.INTENSITY;
+        const syy = (-this.mouse.y*-10*(mobile?0:1) + hp*30)*this.INTENSITY;
+        this.statusCard.style.transform = 'translate3d('+sx.toFixed(1)+'px,'+syy.toFixed(1)+'px,0)';
+      }
+      if(this.heroContent){
+        this.heroContent.style.transform = 'translateY('+(hp*-40).toFixed(1)+'px)';
+        this.heroContent.style.opacity = Math.max(0, 1 - hp*1.25).toFixed(2);
+      }
+    }
+
+    if(this.techVideo && !mobile){
+      const tr = this.techVideo.getBoundingClientRect();
+      const rel = ((tr.top + tr.height/2) - vh/2)/vh;
+      const ry = rel * -10 * this.INTENSITY;
+      this.techVideo.style.transform = 'perspective(1300px) rotateY('+ry.toFixed(2)+'deg) translateZ(0)';
+    } else if(this.techVideo){ this.techVideo.style.transform = 'none'; }
+
+    this.paintSelection();
+  }
+
+  setupReveal(){
+    if(!this.reveals.length) return;
+    this.reveals.forEach(el=>{
+      el.style.transition = 'opacity .8s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)';
+      el.style.opacity = '0';
+      el.style.transform = 'perspective(1000px) translate3d(0,46px,-120px) rotateX(8deg)';
+      el.style.willChange = 'transform,opacity';
+    });
+    const io = new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){
+          const d = parseFloat(e.target.dataset.revealDelay||0);
+          e.target.style.transitionDelay = d+'ms';
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'none';
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:0.1, rootMargin:'0px 0px -40px 0px'});
+    this.reveals.forEach(el=>io.observe(el));
+    this._ios.push(io);
+  }
+
+  setupTilt(){
+    if(this.mqMobile.matches) return;
+    this.tilts.forEach(el=>{
+      el.addEventListener('mousemove', (e)=>{
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left)/r.width - 0.5;
+        const py = (e.clientY - r.top)/r.height - 0.5;
+        el.style.transition = 'transform .08s linear';
+        el.style.transform = 'perspective(900px) rotateY('+(px*7).toFixed(2)+'deg) rotateX('+(-py*7).toFixed(2)+'deg) translateZ(12px)';
+        el.style.boxShadow = '0 26px 54px rgba(0,0,0,.45)';
+        el.style.borderColor = 'rgba(91,200,232,.45)';
+      });
+      el.addEventListener('mouseleave', ()=>{
+        el.style.transition = 'transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .4s, border-color .4s';
+        el.style.transform = 'none';
+        el.style.boxShadow = 'none';
+        el.style.borderColor = '';
+      });
+    });
+  }
+
+  setupCounters(){
+    if(!this.counters.length) return;
+    const io = new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){
+          const el = e.target;
+          const t = +el.dataset.count;
+          let cur = 0;
+          const iv = setInterval(()=>{
+            cur += t/55;
+            if(cur >= t){ cur = t; clearInterval(iv); }
+            el.textContent = Math.floor(cur);
+          }, 24);
+          this._timers.push(iv);
+          io.unobserve(el);
+        }
+      });
+    }, {threshold:0.4});
+    this.counters.forEach(el=>io.observe(el));
+    this._ios.push(io);
+  }
+
+  paintSelection(){
+    const r = this.root; if(!r) return;
+    const activeKey = this.state.pkgOpen ? this.state.pkgKey : null;
+    const set = (el,prop,val)=>{ if(el && el.style[prop] !== val) el.style[prop] = val; };
+    [...r.querySelectorAll('[data-sel-card]')].forEach(c=>{
+      const ch = c.dataset.selCard === activeKey;
+      const badge = c.querySelector('[data-sel-badge]');
+      set(c,'borderColor', ch ? this.ACCENT : 'rgb(30, 58, 82)');
+      set(c,'transform', ch ? 'translateY(-4px)' : '');
+      set(c,'background', ch ? 'rgba(91, 200, 232, 0.06)' : 'rgb(12, 21, 32)');
+      set(badge,'opacity', ch ? '1' : '0');
+      set(badge,'transform', ch ? 'scale(1)' : 'scale(0)');
+    });
+  }
+
+  selectPkg(key){
+    const closing = (this.state.pkgKey === key && this.state.pkgOpen);
+    if(closing) this.setState({ pkgOpen:false });
+    else this.setState({ pkgKey:key, pkgOpen:true });
+  }
+
+  renderVals(){
+    const key = this.state.pkgKey;
+    const p = key ? this.PACKAGES[key] : null;
+    return {
+      refRoot: this.refRoot,
+      mobOpen: this.state.mobOpen,
+      toggleMob: ()=>this.setState(s=>({ mobOpen:!s.mobOpen })),
+      closeMob: ()=>this.setState({ mobOpen:false }),
+      selectHome: ()=>this.selectPkg('home'),
+      selectBiz: ()=>this.selectPkg('biz'),
+      selectOffice: ()=>this.selectPkg('office'),
+      selectBuilding: ()=>this.selectPkg('building'),
+      pkgOpen: this.state.pkgOpen,
+      pkgBadge: p ? p.badge : '',
+      pkgName: p ? p.name : '',
+      pkgDesc: p ? p.desc : '',
+      pkgPrice: p ? p.price : '',
+      pkgServices: p ? p.services : [],
+      pkgWa: p ? ('https://wa.me/9720509300082?text='+encodeURIComponent(p.wa)) : '#'
+    };
+  }
+}
+</script>
+</body>
+</html>
