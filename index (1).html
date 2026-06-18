@@ -94,7 +94,7 @@ image-slot{display:block;}
 
       <!-- fullscreen video -->
       <div data-hero-video style="position:absolute;inset:0;width:100%;height:100%;will-change:transform;transform-origin:center;overflow:hidden;">
-        <video src="assets/hero-cam.mp4" autoplay loop muted playsinline preload="auto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;"></video>
+        <canvas data-hero-canvas style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
       </div>
       <!-- legibility / cinematic overlays -->
       <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 75% 75% at 50% 50%,transparent 30%,rgba(6,11,18,.72) 100%);"></div>
@@ -193,8 +193,16 @@ image-slot{display:block;}
   </div>
 
   <!-- ===================== SERVICES / BENTO ===================== -->
-  <section id="services" style="padding:120px 0;background:#060B12;position:relative;overflow:hidden;">
-    <div style="max-width:1240px;margin:0 auto;padding:0 28px;">
+  <section id="services" data-svc-section style="padding:120px 0;background:#060B12;position:relative;">
+    <!-- scroll-scrubbed pinned video background -->
+    <div data-svc-bg style="position:absolute;inset:0;z-index:0;pointer-events:none;">
+      <div style="position:sticky;top:0;height:100vh;overflow:hidden;">
+        <canvas data-svc-canvas style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 78% 78% at 50% 50%,rgba(6,11,18,.5) 18%,rgba(6,11,18,.88) 100%);"></div>
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.1) 3px,rgba(0,0,0,.1) 4px);opacity:.4;"></div>
+      </div>
+    </div>
+    <div style="max-width:1240px;margin:0 auto;padding:0 28px;position:relative;z-index:1;">
       <div data-reveal style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:46px;">
         <div>
           <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#3A9BD5;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;">// המערכת המלאה</div>
@@ -206,7 +214,7 @@ image-slot{display:block;}
       <div data-bento data-assemble style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
         <!-- featured: cameras -->
         <article data-tilt data-span="2" style="grid-column:span 2;position:relative;min-height:300px;border-radius:18px;overflow:hidden;border:1px solid #1E3A52;background:#0C1520;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;">
-          <image-slot id="bento-cam" data-imgpar style="position:absolute;top:-9%;left:0;width:100%;height:118%;" shape="rect" fit="cover" placeholder="גרור תמונת מצלמה"></image-slot>
+          <img data-imgpar src="assets/cam-4k.png" alt="מצלמת אבטחה 4K" style="position:absolute;top:-9%;left:0;width:100%;height:118%;object-fit:cover;display:block;"/>
           <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,11,18,.96) 8%,rgba(6,11,18,.45) 55%,rgba(6,11,18,.2));pointer-events:none;"></div>
           <div style="position:absolute;top:18px;right:20px;display:flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:.6rem;color:#00E676;"><span style="width:6px;height:6px;border-radius:50%;background:#00E676;"></span>ONLINE · 4K</div>
           <div style="position:absolute;bottom:0;right:0;left:0;padding:28px 30px;">
@@ -268,7 +276,7 @@ image-slot{display:block;}
   </section>
 
   <!-- ===================== DIMENSIONS (split + features) ===================== -->
-  <section id="dimensions" style="padding:120px 0;background:#060B12;position:relative;overflow:hidden;">
+  <section id="dimensions" data-dim-section style="padding:120px 0;background:#060B12;position:relative;overflow:hidden;">
     <div style="max-width:1240px;margin:0 auto;padding:0 28px;">
       <div data-reveal style="margin-bottom:46px;">
         <div style="font-family:'Share Tech Mono',monospace;font-size:.68rem;color:#3A9BD5;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;">// הפילוסופיה שלנו</div>
@@ -277,7 +285,7 @@ image-slot{display:block;}
 
       <div data-split style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
         <article data-tilt data-reveal style="position:relative;min-height:380px;border-radius:20px;overflow:hidden;border:1px solid #1E3A52;background:#0C1520;transition:transform .4s,box-shadow .3s,border-color .3s;will-change:transform;">
-          <image-slot id="dim-home" data-imgpar style="position:absolute;top:-9%;left:0;width:100%;height:118%;" shape="rect" fit="cover" placeholder="גרור תמונת בית"></image-slot>
+          <canvas data-dim-canvas style="position:absolute;inset:0;width:100%;height:100%;display:block;"></canvas>
           <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(6,11,18,.95) 12%,rgba(6,11,18,.4) 60%,rgba(6,11,18,.25));pointer-events:none;"></div>
           <div style="position:absolute;bottom:0;right:0;left:0;padding:34px;">
             <h3 style="font-family:'Rubik',sans-serif;font-size:1.8rem;font-weight:900;color:#fff;line-height:1.05;margin:0 0 12px;letter-spacing:-.02em;">בתים פרטיים<br/>ונכסי יוקרה</h3>
@@ -588,6 +596,11 @@ class Component extends DCLogic {
     this.parallax = [...r.querySelectorAll('[data-par]')];
     this.heroScene = r.querySelector('[data-hero]');
     this.heroVideo = r.querySelector('[data-hero-video]');
+    this.heroCanvas = r.querySelector('[data-hero-canvas]');
+    this.svcCanvas = r.querySelector('[data-svc-canvas]');
+    this.svcSection = r.querySelector('[data-svc-section]');
+    this.dimCanvas = r.querySelector('[data-dim-canvas]');
+    this.dimSection = r.querySelector('[data-dim-section]');
     this.heroDim = r.querySelector('[data-hero-dim]');
     this.scenes = [...r.querySelectorAll('[data-scene]')];
     this.sceneDots = [...r.querySelectorAll('[data-scene-dots] [data-dot]')];
@@ -620,7 +633,7 @@ class Component extends DCLogic {
     this.setupTilt();
     this.setupCounters();
     this._onMove = (e)=>{ this.mouse.tx=(e.clientX/window.innerWidth-0.5)*2; this.mouse.ty=(e.clientY/window.innerHeight-0.5)*2; };
-    this._onResize = ()=>{ this.applyResponsive(); };
+    this._onResize = ()=>{ this.applyResponsive(); (this.seqs||[]).forEach(s=>this.sizeSeq(s)); };
     window.addEventListener('mousemove', this._onMove, {passive:true});
     window.addEventListener('resize', this._onResize, {passive:true});
     const loop = ()=>{ this.frame(); this._raf = requestAnimationFrame(loop); };
@@ -628,7 +641,9 @@ class Component extends DCLogic {
   }
 
   startVideos(){
+    this.setupScrub();
     (this.videos||[]).forEach(vid=>{
+      if(vid.hasAttribute('data-hero-cam')) return; // scroll-scrubbed — never autoplay/loop
       vid.muted = true; vid.defaultMuted = true; vid.setAttribute('muted','');
       vid.playsInline = true; vid.setAttribute('playsinline','');
       vid.loop = true; vid.setAttribute('loop','');
@@ -639,6 +654,66 @@ class Component extends DCLogic {
     window.addEventListener('scroll', kick, {passive:true, once:true});
     window.addEventListener('touchstart', kick, {passive:true, once:true});
     window.addEventListener('click', kick, {once:true});
+  }
+
+  setupScrub(){
+    this.seqs = [];
+    if(this.heroCanvas) this.seqs.push(this.makeSeq(this.heroCanvas, 'assets/frames/', 80, ()=>this._heroP||0));
+    if(this.svcCanvas)  this.seqs.push(this.makeSeq(this.svcCanvas, 'assets/service-frames/', 40, ()=>this.sectionProgress(this.svcSection)));
+    if(this.dimCanvas)  this.seqs.push(this.makeSeq(this.dimCanvas, 'assets/dimension-frames/', 40, ()=>this.sectionProgress(this.dimSection)));
+    this.seqs.forEach(s=>this.preloadSeq(s));
+  }
+
+  makeSeq(canvas, base, count, getP){
+    const seq = { canvas, ctx:canvas.getContext('2d'), base, count, imgs:new Array(count).fill(null), ready:0, lastIdx:-1, smP:0, curIdx:0, getP };
+    this.sizeSeq(seq);
+    return seq;
+  }
+
+  preloadSeq(seq){
+    for(let i=0;i<seq.count;i++){
+      const img = new Image(); img.decoding = 'async';
+      img.src = seq.base+'f'+String(i).padStart(2,'0')+'.jpg';
+      img.onload = ()=>{ seq.imgs[i]=img; seq.ready++; if(i===0){ seq.lastIdx=-1; this.paintSeq(seq,0); } };
+    }
+  }
+
+  sizeSeq(seq){
+    const cv = seq.canvas; if(!cv) return;
+    const dpr = Math.min(window.devicePixelRatio||1, 2);
+    const w = cv.clientWidth||window.innerWidth, h = cv.clientHeight||window.innerHeight;
+    cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr);
+    seq.lastIdx = -1; // force redraw at new size
+    this.paintSeq(seq, seq.curIdx||0);
+  }
+
+  // draw a frame index to the sequence's canvas with object-fit:cover behaviour
+  paintSeq(seq, idx){
+    const cv=seq.canvas, ctx=seq.ctx; if(!cv||!ctx) return;
+    let img=seq.imgs[idx];
+    if(!img){ for(let d=1;d<seq.count;d++){ if(seq.imgs[idx-d]){img=seq.imgs[idx-d];break;} if(seq.imgs[idx+d]){img=seq.imgs[idx+d];break;} } }
+    if(!img) return;
+    const cw=cv.width, ch=cv.height, iw=img.naturalWidth, ih=img.naturalHeight;
+    const s=Math.max(cw/iw, ch/ih);
+    const dw=iw*s, dh=ih*s, dx=(cw-dw)/2, dy=(ch-dh)/2;
+    ctx.clearRect(0,0,cw,ch);
+    ctx.drawImage(img,dx,dy,dw,dh);
+    seq.curIdx=idx;
+  }
+
+  scrubSeq(seq){
+    const p = Math.max(0, Math.min(1, seq.getP()));
+    seq.smP += (p - seq.smP) * 0.35;
+    if(Math.abs(p - seq.smP) < 0.002) seq.smP = p;
+    const idx = Math.max(0, Math.min(seq.count-1, Math.round(seq.smP*(seq.count-1))));
+    if(idx !== seq.lastIdx){ seq.lastIdx = idx; this.paintSeq(seq, idx); }
+  }
+
+  // progress of a section travelling through the viewport (0..1)
+  sectionProgress(el){
+    if(!el) return 0;
+    const r = el.getBoundingClientRect(); const vh = window.innerHeight;
+    return (vh - r.top) / (r.height + vh);
   }
 
   applyResponsive(){
@@ -695,11 +770,14 @@ class Component extends DCLogic {
       const p = Math.max(0, Math.min(1, -hr.top / Math.max(1,total)));
       const N = this.scenes.length;
 
-      // fullscreen video: slow cinematic zoom + drift + subtle mouse parallax
+      // scroll-scrubbed product reveal: scroll position drives the hero frame sequence
+      this._heroP = p;
+
+      // keep camera stable & centered so the open/close motion reads clearly; gentle drift only
       if(this.heroVideo){
-        const mx = this.mouse.x * 18 * (mobile?0:1) * this.INTENSITY;
-        const my = this.mouse.y * 12 * (mobile?0:1) * this.INTENSITY;
-        const sc = 1.06 + p*0.34*this.INTENSITY;
+        const mx = this.mouse.x * 14 * (mobile?0:1) * this.INTENSITY;
+        const my = this.mouse.y * 9 * (mobile?0:1) * this.INTENSITY;
+        const sc = 1.05 + p*0.05*this.INTENSITY;
         this.heroVideo.style.transform = 'scale('+sc.toFixed(3)+') translate3d('+mx.toFixed(1)+'px,'+my.toFixed(1)+'px,0)';
       }
       if(this.heroDim) this.heroDim.style.background = 'rgba(6,11,18,'+(0.34 + p*0.16).toFixed(3)+')';
@@ -737,6 +815,7 @@ class Component extends DCLogic {
     } else if(this.techVideo){ this.techVideo.style.transform = 'none'; }
 
     this.scrollFx(vh, mobile);
+    (this.seqs||[]).forEach(s=>this.scrubSeq(s));
     this.paintSelection();
   }
 
