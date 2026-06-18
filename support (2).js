@@ -658,9 +658,9 @@ class Component extends DCLogic {
 
   setupScrub(){
     this.seqs = [];
-    if(this.heroCanvas) this.seqs.push(this.makeSeq(this.heroCanvas, 'assets', 80, ()=>this._heroP||0));
-    if(this.svcCanvas)  this.seqs.push(this.makeSeq(this.svcCanvas, 'assets', 40, ()=>this.sectionProgress(this.svcSection)));
-    if(this.dimCanvas)  this.seqs.push(this.makeSeq(this.dimCanvas, 'assets', 40, ()=>this.sectionProgress(this.dimSection)));
+    if(this.heroCanvas) this.seqs.push(this.makeSeq(this.heroCanvas, 'assets/hero-', 80, ()=>this._heroP||0));
+    if(this.svcCanvas)  this.seqs.push(this.makeSeq(this.svcCanvas, 'assets/svc-', 40, ()=>this.sectionProgress(this.svcSection)));
+    if(this.dimCanvas)  this.seqs.push(this.makeSeq(this.dimCanvas, 'assets/dim-', 40, ()=>this.sectionProgress(this.dimSection)));
     this.seqs.forEach(s=>this.preloadSeq(s));
   }
 
