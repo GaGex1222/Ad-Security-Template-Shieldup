@@ -42,7 +42,12 @@
   @keyframes adFloatIcon{0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-46px) rotate(8deg)}}
   @keyframes adFloatIconB{0%,100%{transform:translateY(0) rotate(6deg)}50%{transform:translateY(42px) rotate(-7deg)}}
   @keyframes adFloatIconC{0%,100%{transform:translate(0,0) rotate(0)}33%{transform:translate(26px,-30px) rotate(10deg)}66%{transform:translate(-22px,-12px) rotate(-8deg)}}
+  @keyframes adShine{to{background-position:220% center}}
+  @keyframes adAurora{to{transform:rotate(360deg)}}
+  @keyframes adScan{0%{transform:translateY(-15vh);opacity:0}12%{opacity:.5}88%{opacity:.5}100%{transform:translateY(115vh);opacity:0}}
+  @keyframes adRiseP{0%{transform:translateY(30px) scale(.6);opacity:0}15%{opacity:.9}85%{opacity:.9}100%{transform:translateY(-160px) scale(1.1);opacity:0}}
 </style>
+<script src="image-slot.js"></script>
 </helmet>
 
 <div id="ad-root" dir="rtl" style="position:relative;min-height:100vh;background:radial-gradient(1100px 700px at 80% -5%,rgba(40,90,200,.30),transparent 60%),radial-gradient(900px 600px at 10% 30%,rgba(30,70,170,.18),transparent 55%),#05080f;overflow:hidden;">
@@ -52,6 +57,26 @@
   <!-- animated background layer -->
   <div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
     <div style="position:absolute;inset:-2px;background-image:linear-gradient(rgba(90,140,230,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(90,140,230,.045) 1px,transparent 1px);background-size:60px 60px;animation:adGridPan 7s linear infinite;-webkit-mask-image:radial-gradient(circle at 50% 35%,#000,transparent 78%);mask-image:radial-gradient(circle at 50% 35%,#000,transparent 78%);"></div>
+    <div style="position:absolute;top:30%;left:50%;width:920px;height:920px;margin:-460px 0 0 -460px;border-radius:50%;background:conic-gradient(from 0deg,rgba(74,140,255,.12),rgba(40,90,210,.03),rgba(110,90,255,.09),rgba(40,120,220,.04),rgba(74,140,255,.12));filter:blur(80px);animation:adAurora 44s linear infinite;"></div>
+    <div style="position:absolute;left:0;right:0;height:150px;background:linear-gradient(180deg,transparent,rgba(100,160,255,.06),transparent);animation:adScan 10s linear infinite;"></div>
+    <div style="position:absolute;left:0;right:0;height:150px;background:linear-gradient(180deg,transparent,rgba(120,90,255,.05),transparent);animation:adScan 10s linear infinite 5s;"></div>
+    <div id="ad-spot" style="position:absolute;top:0;left:0;width:560px;height:560px;margin:-280px 0 0 -280px;border-radius:50%;background:radial-gradient(circle,rgba(74,140,255,.14),rgba(74,140,255,.04) 45%,transparent 68%);transform:translate(-300px,-300px);"></div>
+    <div style="position:absolute;top:65%;left:25%;width:760px;height:760px;margin:-380px 0 0 -380px;border-radius:50%;background:conic-gradient(from 180deg,rgba(110,90,255,.08),rgba(40,120,220,.03),rgba(74,140,255,.10),rgba(40,90,210,.03),rgba(110,90,255,.08));filter:blur(75px);animation:adAurora 52s linear infinite reverse;"></div>
+    <div style="position:absolute;left:0;right:0;height:120px;background:linear-gradient(180deg,transparent,rgba(90,150,255,.05),transparent);animation:adScan 13s linear infinite 2.5s;"></div>
+    <span style="position:absolute;left:35%;top:10%;width:3px;height:3px;border-radius:50%;background:#9ec1ff;box-shadow:0 0 7px #6aa6ff;animation:adTwinkle 7.2s ease-in-out infinite .3s;"></span>
+    <span style="position:absolute;left:60%;top:8%;width:4px;height:4px;border-radius:50%;background:#7fb0ff;box-shadow:0 0 8px #4a8cff;animation:adTwinkle 8.4s ease-in-out infinite 1.3s;"></span>
+    <span style="position:absolute;left:4%;top:30%;width:4px;height:4px;border-radius:50%;background:#9ec1ff;box-shadow:0 0 8px #6aa6ff;animation:adTwinkle 6.2s ease-in-out infinite .9s;"></span>
+    <span style="position:absolute;left:94%;top:36%;width:3px;height:3px;border-radius:50%;background:#7fb0ff;box-shadow:0 0 7px #4a8cff;animation:adTwinkle 9.4s ease-in-out infinite 2.1s;"></span>
+    <span style="position:absolute;left:50%;top:54%;width:5px;height:5px;border-radius:50%;background:#9ec1ff;box-shadow:0 0 9px #6aa6ff;animation:adTwinkle 7.6s ease-in-out infinite 1.7s;"></span>
+    <span style="position:absolute;left:24%;top:80%;width:4px;height:4px;border-radius:50%;background:#7fb0ff;box-shadow:0 0 8px #4a8cff;animation:adTwinkle 8.8s ease-in-out infinite .5s;"></span>
+    <span style="position:absolute;left:72%;top:66%;width:3px;height:3px;border-radius:50%;background:#9ec1ff;box-shadow:0 0 7px #6aa6ff;animation:adTwinkle 6.9s ease-in-out infinite 2.6s;"></span>
+    <span style="position:absolute;left:86%;top:92%;width:4px;height:4px;border-radius:50%;background:#7fb0ff;box-shadow:0 0 8px #4a8cff;animation:adTwinkle 9.6s ease-in-out infinite 1.2s;"></span>
+    <span style="position:absolute;left:22%;bottom:0;width:4px;height:4px;border-radius:50%;background:#7fb0ff;box-shadow:0 0 9px #4a8cff;animation:adRiseP 11s linear infinite;"></span>
+    <span style="position:absolute;left:44%;bottom:0;width:3px;height:3px;border-radius:50%;background:#9ec1ff;box-shadow:0 0 8px #6aa6ff;animation:adRiseP 14s linear infinite 3s;"></span>
+    <span style="position:absolute;left:66%;bottom:0;width:5px;height:5px;border-radius:50%;background:#7fb0ff;box-shadow:0 0 10px #4a8cff;animation:adRiseP 12s linear infinite 6s;"></span>
+    <span style="position:absolute;left:80%;bottom:0;width:3px;height:3px;border-radius:50%;background:#9ec1ff;box-shadow:0 0 8px #6aa6ff;animation:adRiseP 15s linear infinite 1.5s;"></span>
+    <span style="position:absolute;left:10%;bottom:0;width:4px;height:4px;border-radius:50%;background:#7fb0ff;box-shadow:0 0 9px #4a8cff;animation:adRiseP 13s linear infinite 4.5s;"></span>
+    <span style="position:absolute;left:34%;bottom:0;width:3px;height:3px;border-radius:50%;background:#9ec1ff;box-shadow:0 0 8px #6aa6ff;animation:adRiseP 16s linear infinite 8s;"></span>
     <div style="position:absolute;top:8%;left:-6%;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(74,140,255,.16),transparent 70%);filter:blur(50px);animation:adDrift1 24s ease-in-out infinite;"></div>
     <div style="position:absolute;top:48%;right:-8%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(40,90,210,.14),transparent 70%);filter:blur(60px);animation:adDrift2 30s ease-in-out infinite;"></div>
     <div style="position:absolute;bottom:6%;left:22%;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(60,120,255,.1),transparent 70%);filter:blur(55px);animation:adDrift3 27s ease-in-out infinite;"></div>
@@ -69,6 +94,7 @@
     <span style="position:absolute;left:62%;top:58%;width:4px;height:4px;border-radius:50%;background:#9ec1ff;box-shadow:0 0 8px #6aa6ff;animation:adTwinkle 8.2s ease-in-out infinite 1.5s;"></span>
 
     <!-- floating motion-blurred security icons -->
+    <div id="ad-icons" style="position:absolute;inset:0;will-change:transform;">
     <div style="position:absolute;left:7%;top:20%;color:rgba(130,170,255,.11);filter:blur(1.4px);animation:adFloatIcon 23s ease-in-out infinite;"><svg width="78" height="78" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5l-8-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
     <div style="position:absolute;left:83%;top:17%;color:rgba(130,170,255,.10);filter:blur(1.7px);animation:adFloatIconB 27s ease-in-out infinite .6s;"><svg width="66" height="66" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7H13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H3.5A1.5 1.5 0 0 1 2 15.5z"/><path d="M15 10.5l5-3v9l-5-3z"/><circle cx="8" cy="12" r="2.2"/></svg></div>
     <div style="position:absolute;left:71%;top:38%;color:rgba(130,170,255,.12);filter:blur(1.2px);animation:adFloatIcon 19s ease-in-out infinite 2s;"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
@@ -80,6 +106,12 @@
     <div style="position:absolute;left:41%;top:13%;color:rgba(130,170,255,.07);filter:blur(2.6px);animation:adFloatIcon 28s ease-in-out infinite .8s;"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
     <div style="position:absolute;left:47%;top:63%;color:rgba(130,170,255,.07);filter:blur(2.8px);animation:adFloatIconB 26s ease-in-out infinite 1.8s;"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5l-8-3z"/></svg></div>
     <div style="position:absolute;left:30%;top:34%;color:rgba(130,170,255,.08);filter:blur(2px);animation:adFloatIconC 32s ease-in-out infinite 2.6s;"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7H13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H3.5A1.5 1.5 0 0 1 2 15.5z"/><path d="M15 10.5l5-3v9l-5-3z"/><circle cx="8" cy="12" r="2.2"/></svg></div>
+    <div style="position:absolute;left:60%;top:8%;color:rgba(130,170,255,.09);filter:blur(1.8px);animation:adFloatIconB 29s ease-in-out infinite 1.2s;"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+    <div style="position:absolute;left:3%;top:60%;color:rgba(130,170,255,.10);filter:blur(1.6px);animation:adFloatIcon 26s ease-in-out infinite .4s;"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.5 8 8 11 4.5-3 8-6 8-11V5l-8-3z"/></svg></div>
+    <div style="position:absolute;left:50%;top:44%;color:rgba(130,170,255,.08);filter:blur(2.2px);animation:adFloatIconC 31s ease-in-out infinite 2.3s;"><svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5a11 11 0 0 1 16 0"/><path d="M7.5 15a6 6 0 0 1 9 0"/><circle cx="12" cy="18.5" r="1.2" fill="currentColor" stroke="none"/></svg></div>
+    <div style="position:absolute;left:90%;top:78%;color:rgba(130,170,255,.09);filter:blur(1.7px);animation:adFloatIconB 23s ease-in-out infinite 1.9s;"><svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+    <div style="position:absolute;left:26%;top:88%;color:rgba(130,170,255,.08);filter:blur(2px);animation:adFloatIcon 28s ease-in-out infinite .7s;"><svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+    </div>
   </div>
 
   <!-- ambient glow blobs -->
@@ -135,7 +167,7 @@
           <span style="width:8px;height:8px;border-radius:50%;background:#4a8cff;box-shadow:0 0 10px #4a8cff;animation:adDot 1.8s ease-in-out infinite;"></span>
           הביטחון שלך — האחריות שלנו
         </span>
-        <h1 data-reveal="up" data-reveal-delay="140" style="margin:20px 0 0;font-size:clamp(36px,6.2vw,64px);line-height:1.05;font-weight:800;letter-spacing:-.5px;background:linear-gradient(180deg,#eef3ff,#7fb0ff);-webkit-background-clip:text;background-clip:text;color:transparent;">
+        <h1 data-reveal="up" data-reveal-delay="140" style="margin:20px 0 0;font-size:clamp(36px,6.2vw,64px);line-height:1.05;font-weight:800;letter-spacing:-.5px;background:linear-gradient(100deg,#eef3ff 0%,#9ec8ff 32%,#e6f0ff 50%,#9ec8ff 68%,#eef3ff 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:adShine 7s linear infinite;">
           מערכות אבטחה<br>חכמות לעסק ולבית
         </h1>
         <p data-reveal="up" data-reveal-delay="260" style="margin:{{ heroPMargin }};max-width:520px;font-size:clamp(16px,2vw,19px);line-height:1.7;color:#9fb2cf;font-weight:400;">
@@ -351,6 +383,63 @@
     </div>
   </section>
 
+  <!-- ============ GALLERY ============ -->
+  <section id="gallery" style="position:relative;max-width:1180px;margin:0 auto;padding:clamp(40px,6vw,90px) 22px;">
+    <div data-reveal style="text-align:center;max-width:720px;margin:0 auto 48px;">
+      <span style="display:inline-flex;align-items:center;gap:9px;padding:8px 16px;border-radius:999px;background:rgba(74,140,255,.1);border:1px solid rgba(120,160,255,.24);color:#9ec1ff;font-size:14px;font-weight:600;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#4a8cff;animation:adDot 1.8s ease-in-out infinite;"></span> מה אנחנו מתקינים
+      </span>
+      <h2 style="margin:18px 0 0;font-size:clamp(28px,4.5vw,46px);line-height:1.12;font-weight:800;letter-spacing:-.5px;background:linear-gradient(180deg,#eef3ff,#7fb0ff);-webkit-background-clip:text;background-clip:text;color:transparent;">המוצרים שלנו</h2>
+      <p style="margin:16px auto 0;max-width:520px;font-size:clamp(16px,2vw,18px);line-height:1.7;color:#9fb2cf;">ארבעת התחומים שבהם אנחנו מתמחים — מצלמות, אזעקות, תקשורת ואינטרקום וקודנים.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;">
+      <!-- מצלמות -->
+      <div data-reveal="zoom" data-reveal-delay="0" style="position:relative;border-radius:26px;padding:1px;background:linear-gradient(160deg,rgba(120,160,255,.45),rgba(40,90,210,.12) 45%,rgba(10,16,30,.5));box-shadow:0 22px 60px -34px rgba(40,90,210,.7);transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;" style-hover="transform:translateY(-8px);box-shadow:0 36px 80px -30px rgba(40,90,210,.85);">
+        <div style="position:relative;overflow:hidden;border-radius:25px;padding:34px 26px 30px;background:linear-gradient(170deg,rgba(16,26,48,.92),rgba(8,13,26,.92));text-align:center;">
+          <div style="position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:160%;height:70%;background:radial-gradient(circle,rgba(74,140,255,.22),transparent 65%);pointer-events:none;"></div>
+          <div style="position:relative;width:96px;height:96px;margin:0 auto;border-radius:24px;background:linear-gradient(135deg,#4a8cff,#1e49b8);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 38px -10px rgba(60,120,255,.7),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .4s cubic-bezier(.16,1,.3,1);animation:adFloat 5.4s ease-in-out infinite;" style-hover="transform:scale(1.08) rotate(-4deg);">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5A1.5 1.5 0 0 1 3.5 7H13a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H3.5A1.5 1.5 0 0 1 2 15.5z"/><path d="M15 10.5l5-3v9l-5-3z"/><circle cx="8" cy="12" r="2.2"/></svg>
+          </div>
+          <h3 style="position:relative;margin:22px 0 0;font-size:21px;font-weight:800;color:#f4f8ff;">מצלמות</h3>
+          <p style="position:relative;margin:9px 0 0;font-size:14.5px;line-height:1.6;color:#9fb2cf;">מצלמות אבטחה באיכות גבוהה, ראיית לילה וצפייה חיה מהנייד.</p>
+        </div>
+      </div>
+      <!-- אזעקות -->
+      <div data-reveal="zoom" data-reveal-delay="110" style="position:relative;border-radius:26px;padding:1px;background:linear-gradient(160deg,rgba(120,160,255,.45),rgba(40,90,210,.12) 45%,rgba(10,16,30,.5));box-shadow:0 22px 60px -34px rgba(40,90,210,.7);transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;" style-hover="transform:translateY(-8px);box-shadow:0 36px 80px -30px rgba(40,90,210,.85);">
+        <div style="position:relative;overflow:hidden;border-radius:25px;padding:34px 26px 30px;background:linear-gradient(170deg,rgba(16,26,48,.92),rgba(8,13,26,.92));text-align:center;">
+          <div style="position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:160%;height:70%;background:radial-gradient(circle,rgba(74,140,255,.22),transparent 65%);pointer-events:none;"></div>
+          <div style="position:relative;width:96px;height:96px;margin:0 auto;border-radius:24px;background:linear-gradient(135deg,#4a8cff,#1e49b8);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 38px -10px rgba(60,120,255,.7),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .4s cubic-bezier(.16,1,.3,1);animation:adFloatB 5.8s ease-in-out infinite;" style-hover="transform:scale(1.08) rotate(4deg);">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          </div>
+          <h3 style="position:relative;margin:22px 0 0;font-size:21px;font-weight:800;color:#f4f8ff;">אזעקות</h3>
+          <p style="position:relative;margin:9px 0 0;font-size:14.5px;line-height:1.6;color:#9fb2cf;">גילוי פריצה ותנועה עם התראה מיידית לנייד ולמוקד.</p>
+        </div>
+      </div>
+      <!-- תקשורת -->
+      <div data-reveal="zoom" data-reveal-delay="220" style="position:relative;border-radius:26px;padding:1px;background:linear-gradient(160deg,rgba(120,160,255,.45),rgba(40,90,210,.12) 45%,rgba(10,16,30,.5));box-shadow:0 22px 60px -34px rgba(40,90,210,.7);transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;" style-hover="transform:translateY(-8px);box-shadow:0 36px 80px -30px rgba(40,90,210,.85);">
+        <div style="position:relative;overflow:hidden;border-radius:25px;padding:34px 26px 30px;background:linear-gradient(170deg,rgba(16,26,48,.92),rgba(8,13,26,.92));text-align:center;">
+          <div style="position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:160%;height:70%;background:radial-gradient(circle,rgba(74,140,255,.22),transparent 65%);pointer-events:none;"></div>
+          <div style="position:relative;width:96px;height:96px;margin:0 auto;border-radius:24px;background:linear-gradient(135deg,#4a8cff,#1e49b8);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 38px -10px rgba(60,120,255,.7),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .4s cubic-bezier(.16,1,.3,1);animation:adFloat 6s ease-in-out infinite;" style-hover="transform:scale(1.08) rotate(-4deg);">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5a11 11 0 0 1 16 0"/><path d="M7.5 15a6 6 0 0 1 9 0"/><circle cx="12" cy="18.5" r="1.3" fill="#fff" stroke="none"/></svg>
+          </div>
+          <h3 style="position:relative;margin:22px 0 0;font-size:21px;font-weight:800;color:#f4f8ff;">תקשורת</h3>
+          <p style="position:relative;margin:9px 0 0;font-size:14.5px;line-height:1.6;color:#9fb2cf;">פריסת רשת ותשתיות תקשורת יציבות לכל מערכות האבטחה.</p>
+        </div>
+      </div>
+      <!-- אינטרקום וקודנים -->
+      <div data-reveal="zoom" data-reveal-delay="330" style="position:relative;border-radius:26px;padding:1px;background:linear-gradient(160deg,rgba(120,160,255,.45),rgba(40,90,210,.12) 45%,rgba(10,16,30,.5));box-shadow:0 22px 60px -34px rgba(40,90,210,.7);transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s;" style-hover="transform:translateY(-8px);box-shadow:0 36px 80px -30px rgba(40,90,210,.85);">
+        <div style="position:relative;overflow:hidden;border-radius:25px;padding:34px 26px 30px;background:linear-gradient(170deg,rgba(16,26,48,.92),rgba(8,13,26,.92));text-align:center;">
+          <div style="position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:160%;height:70%;background:radial-gradient(circle,rgba(74,140,255,.22),transparent 65%);pointer-events:none;"></div>
+          <div style="position:relative;width:96px;height:96px;margin:0 auto;border-radius:24px;background:linear-gradient(135deg,#4a8cff,#1e49b8);display:flex;align-items:center;justify-content:center;box-shadow:0 16px 38px -10px rgba(60,120,255,.7),inset 0 1px 0 rgba(255,255,255,.25);transition:transform .4s cubic-bezier(.16,1,.3,1);animation:adFloatB 5.2s ease-in-out infinite;" style-hover="transform:scale(1.08) rotate(4deg);">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="13" rx="2"/><circle cx="9" cy="10.5" r="2.4"/><path d="M14 8.5h4"/><path d="M14 12h4"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>
+          </div>
+          <h3 style="position:relative;margin:22px 0 0;font-size:21px;font-weight:800;color:#f4f8ff;">אינטרקום וקודנים</h3>
+          <p style="position:relative;margin:9px 0 0;font-size:14.5px;line-height:1.6;color:#9fb2cf;">בקרת כניסה חכמה — אינטרקום וידאו, קודנים ומנעולים חשמליים.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ EQUIPMENT ============ -->
   <section style="position:relative;max-width:1180px;margin:0 auto;padding:clamp(40px,6vw,90px) 22px;">
     <div data-reveal style="position:relative;overflow:hidden;background:linear-gradient(160deg,rgba(22,36,66,.65),rgba(8,13,26,.6));border:1px solid rgba(120,160,230,.16);border-radius:28px;padding:clamp(36px,5vw,64px) 22px;text-align:center;">
@@ -493,6 +582,10 @@ class Component extends DCLogic {
     this._onResize = () => this.setState({ vw: window.innerWidth });
     window.addEventListener('resize', this._onResize);
     this._shown = new Set();
+    this._mx = window.innerWidth / 2;
+    this._my = window.innerHeight / 2;
+    this._onMove = (e) => { this._mx = e.clientX; this._my = e.clientY; };
+    window.addEventListener('pointermove', this._onMove, { passive: true });
     this._loop = this._loop.bind(this);
     this._loop();
     this._timer = setInterval(this._loop, 33);
@@ -505,6 +598,7 @@ class Component extends DCLogic {
 
   componentWillUnmount() {
     if (this._onResize) window.removeEventListener('resize', this._onResize);
+    if (this._onMove) window.removeEventListener('pointermove', this._onMove);
     if (this._timer) clearInterval(this._timer);
   }
 
@@ -514,6 +608,8 @@ class Component extends DCLogic {
       if (this._root) {
         this._bar = this._root.querySelector('#ad-progress');
         this._orb = this._root.querySelector('#ad-orb');
+        this._spot = this._root.querySelector('#ad-spot');
+        this._icons = this._root.querySelector('#ad-icons');
       }
     }
     const root = this._root;
@@ -538,6 +634,14 @@ class Component extends DCLogic {
       const p = Math.min(1, Math.max(0, y / max));
       if (this._bar) this._bar.style.transform = 'scaleX(' + p + ')';
       if (this._orb) this._orb.style.transform = 'translateY(' + (y * 0.05).toFixed(1) + 'px)';
+      const mx = this._mx || 0;
+      const my = this._my || 0;
+      if (this._spot) this._spot.style.transform = 'translate(' + mx.toFixed(1) + 'px,' + my.toFixed(1) + 'px)';
+      if (this._icons) {
+        const px = (mx / (window.innerWidth || 1) - 0.5) * 34;
+        const pyv = (my / (window.innerHeight || 1) - 0.5) * 34 - y * 0.04;
+        this._icons.style.transform = 'translate(' + px.toFixed(1) + 'px,' + pyv.toFixed(1) + 'px)';
+      }
     }
   }
 
